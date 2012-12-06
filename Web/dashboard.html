@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css" >
+  <link rel="stylesheet" type="text/css" href="../bootstrap/css/styles.css" >
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDB8hSxJc0O5AOlzvYVAle7ARvFENvFqbI&sensor=true">
+    </script>
+    <script type = "text/javascript" src = "js/dashboard.js"></script>
+    <script type="text/javascript" src = "../bootstrap/js/bootstrap.js"></script>
+</head>
+<body>
+	<div class="navbar">
+		<div class = "navbar-inner">
+			<div class = "container-fluid">
+				<ul class="nav">
+					<li><a class = "brand" href = "#">SECE</a></li>
+					<li><a href = "#">Devices</a></li>
+					<li><a href = "#">Rules</a></li>
+					<li class = "active"><a href = "#">Geoloc</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class = "container-fluid">
+		<div class = "row-fluid">
+			<div id = "sidebar" class = "span3">
+				<div class="accordion" id="accordion2">
+                <div class="accordion-group">
+                  <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                      My Floor Plans
+                    </a>
+                  </div>
+                  <div id="collapseOne" class="accordion-body in collapse" style="height: auto;">
+                    <div class="accordion-inner">
+                    	<ul class = "floor-plans">
+                    		<li class = "pop-up"><a href="#" class="btn" rel="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="Popover on right">Popover on right</a>
+                    			<ul>
+                    				<li class = "poop-up">CEPSR</li>
+                    					<ul>
+                    						<li class = "pop-up">IRT Lab</li>
+                    						<li class= "pop-up">Corridoor</li>
+                    					</ul>
+                    			</ul>
+                    		</li>
+                    	</ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-group">
+                  <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                      Group Floor Plans
+                    </a>
+                  </div>
+                  <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+                    <div class="accordion-inner">
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-group">
+                  <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                      SmartObjects
+                    </a>
+                  </div>
+                  <div id="collapseThree" class="accordion-body collapse" style="height: 0px;">
+                    <div class="accordion-inner">
+                    </div>
+                  </div>
+                </div>
+              </div>
+			</div>
+			<div class = "span8" id = "map">
+			</div>
+		</div>
+	</div>
+</body>
+</html>
