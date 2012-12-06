@@ -160,3 +160,98 @@ TODO
 - Can we get access to the database that Google maps already maintains?
 - Can we also get access to polygons created by Google, and not just by users?
 - Can we obtain the polygon for Old Town Square in Prague?
+
+
+12/4 Meeting Notes
+==================
+
+Consistency Checks
+------------------
+- Do we need to ensure that the logical ordering of items in the tree
+is synchronized with their geo-based ordering? Is this something the
+user would expect?
+- Maybe we could implement a button that would make it possible to
+re-arrange the tree so that the user can see either the logical
+ordering or the geo-based ordering of the tree
+- The initial prototype will be without any consistency checks
+- We may need to do A/B testing on a small group of users to see if
+this is required at all
+
+Locating Smart Objects
+----------------------
+- We'll have a database of smart objects with with inaccurate location
+information
+- The goal is to use the UI to find out precise location for each
+smart object in an intuitive and user-friendly way
+- We'll need location information with cm precision
+
+SMOB Location
+-------------
+- Longitude
+- Latitude
+- Altitude
+- Accuracy
+- Altitude accuracy
+- Timestamp
+- Information source
+
+- From the list of all smart objects the user has, we need to select
+those that need manual adjusting. Those objects will be shown in UI so
+that the  user can locate them.
+How to select objects for manual location:
+  1) Take a list of all user's smart objects
+  2) Filter out all objects that have manual source of location information
+  3) Filter out all objects with accuracy above some threshold.
+
+- The UI presents two separate lists of Smart Objects to the user:
+located smart objects and inaccurate smart objects.
+- The list of inaccurate smart objects will be flat, with the
+possibility to sort the list:
+  - Alphabetically
+  - Geographically
+  - Timestamp (see newly added objects first)
+- The list of located smart objects can be presented:
+  - flat (sorted by location by default with the possibility to use
+alphabetical sorting)
+  - ? as tree overlaid with information from the polygon tree (where
+objects coming from the polygon tree are dimmed)
+     (what would happen if the tree hierarchy is not synchronized with
+the geoloc-hierarchy)
+     (may require A/B testing with real users to get right)
+
+Locating Smart Objects
+----------------------
+- The user selects an object from the inaccurate list.
+- The maps view will reposition to show the corresponding object
+marker in the center of the maps, map will zoom automatically for
+better location accuracy
+- The user can drag and drop the marker
+- The system detects the drop event, obtains longitude and latitude
+from google maps and searches the database of floor plans
+- The system loads all the floor plans and shows them to the user
+along with some information about multiple plans (floors, overlapping,
+etc..)
+- The UI provides navigation for the user to select among overlapping
+plans on the same level and also for plans for different floors
+- The smallest enclosing plan is show first
+
+- When the user attempts to re-locate an already located smart object,
+the same ui shows up with the corresponding floor plan already shown
+(basically we want for the user to return to the state where he/she
+left off)
+
+- Optionally the UI should have the option to locate the object
+vertically (we can show a slider to locate the object within the
+altitude range of the floor plan)
+
+Dashboard
+---------
+- Show the following:
+  - Tree of polygons
+  - Tree of smart objects
+  - Group polygons
+  - A google map view with a search field
+
+- By default we zoom to the user's location and show smart objects
+nearby on the map
+- Filter smart objects by name/text/whatever
