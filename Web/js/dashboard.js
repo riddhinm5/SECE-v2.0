@@ -7,4 +7,7 @@ $(function(){
 	}
 
 	var map = new google.maps.Map(document.getElementById("map"), myOptions);
+	$('#my-root').popover();
+	$('#grp-root').popover();
+	$('#fridge').popover();
 });

@@ -6,25 +6,25 @@
     <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDB8hSxJc0O5AOlzvYVAle7ARvFENvFqbI&sensor=true">
     </script>
-    <script type = "text/javascript" src = "js/dashboard.js"></script>
-    <script type="text/javascript" src = "../bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/dashboard.js"></script>
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
 </head>
 <body>
 	<div class="navbar">
-		<div class = "navbar-inner">
-			<div class = "container-fluid">
+		<div class="navbar-inner">
+			<div class="container-fluid">
 				<ul class="nav">
-					<li><a class = "brand" href = "#">SECE</a></li>
-					<li><a href = "#">Devices</a></li>
-					<li><a href = "#">Rules</a></li>
-					<li class = "active"><a href = "#">Geoloc</a></li>
+					<li><a class="brand" href="#">SECE</a></li>
+					<li><a href="#">Devices</a></li>
+					<li><a href="#">Rules</a></li>
+					<li class="active"><a href="#">Geoloc</a></li>
 				</ul>
 			</div>
 		</div>
 	</div>
-	<div class = "container-fluid">
-		<div class = "row-fluid">
-			<div id = "sidebar" class = "span3">
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div id="sidebar" class="span3">
 				<div class="accordion" id="accordion2">
                 <div class="accordion-group">
                   <div class="accordion-heading">
@@ -34,13 +34,13 @@
                   </div>
                   <div id="collapseOne" class="accordion-body in collapse" style="height: auto;">
                     <div class="accordion-inner">
-                    	<ul class = "floor-plans">
-                    		<li class = "pop-up"><a href="#" class="btn btn-link" rel="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="Popover on right">ROOT</a>
+                    	<ul class="my-floor-plans">
+                    		<li class="pop-up"><a href="#" id="my-root" class="btn btn-link" rel="popover" data-html="true" data-placement="right" data-content="<a href='#'><i class='icon-plus'></i>&nbspFloor Plan</a><br><a href='#'><i class='icon-plus'></i>&nbspPolygon</a><br><a href='#'><i class='icon-plus'></i>&nbspgroup</a>" data-original-title="Options" data-trigger="click">ROOT</a>
                     			<ul>
-                    				<li class = "poop-up">CEPSR</li>
+                    				<li class="poop-up">CEPSR</li>
                     					<ul>
-                    						<li class = "pop-up">IRT Lab</li>
-                    						<li class= "pop-up">Corridoor</li>
+                    						<li class="pop-up">IRT Lab</li>
+                    						<li class="pop-up">Corridoor</li>
                     					</ul>
                     			</ul>
                     		</li>
@@ -56,7 +56,17 @@
                   </div>
                   <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
                     <div class="accordion-inner">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                      <ul class="grp-floor-plans">
+                        <li class="pop-up"><a href="#" id="grp-root" class="btn btn-link" rel="popover" data-html="true" data-placement="right" data-content="<a href='#'><i class='icon-plus'></i>&nbspFloor Plan</a><br><a href='#'><i class='icon-plus'></i>&nbspPolygon</a><br><a href='#'><i class='icon-plus'></i>&nbspgroup</a>" data-original-title="Options" data-trigger="click">ROOT</a>
+                          <ul>
+                            <li class="poop-up">CEPSR</li>
+                              <ul>
+                                <li class="pop-up">IRT Lab</li>
+                                <li class="pop-up">Corridoor</li>
+                              </ul>
+                          </ul>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -68,13 +78,21 @@
                   </div>
                   <div id="collapseThree" class="accordion-body collapse" style="height: 0px;">
                     <div class="accordion-inner">
-                      Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+                      <ul class="smart-objects">
+                        <li>Located SmartObjects</li>
+                          <ul>
+                            <li>
+                            <a href="#" id="fridge" class="btn btn-link" rel="popover" data-html="true" data-placement="right" data-content="<a href='#'><i class='icon-pencil'></i>&nbspEdit</a><br><a href='#'><i class='icon-minus'></i>&nbspHide</a>" data-original-title="Options" data-trigger="click">Fridge</a></li>
+                            <li>TV</li>
+                          </ul>
+                        <li>Inaccurate SmartObjects</li>
+                      </ul>
                     </div>
                   </div>
                 </div>
               </div>
 			</div>
-			<div class = "span9" id = "map">
+			<div class="span9" id="map">
 			</div>
 		</div>
 	</div>

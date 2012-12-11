@@ -255,3 +255,50 @@ Dashboard
 - By default we zoom to the user's location and show smart objects
 nearby on the map
 - Filter smart objects by name/text/whatever
+
+Architecture
+============
+
+The SECEv2.0 application is focused on providing a user with an abstraction of floor plans and polygons. Floor plans being actual floor plan images which can be uploaded by individual users for the different places where they own and place their smart objects. The abstraction of floor plans has been added to the system so that it can support queries such as "switch off all the lights at home" with the user providing the floor plan of home to the system. Similarly, the abstraction of polygons has been provided so as to give the user the ability to draw polygons which represent larger smart objects as well as entities such as rooms or areas within a floor plan. These polygons can help the system parse queries such as "dim the lamp next to the fridge". Besides this the system consists of smartObjects the information regard them is stored in a separate database. This information is to be translated into the Geoloc database such that the location information stored in the geoloc database is as accurate as possible. 
+The architecture of the web application which reflects this model will consists of 3 parts. The server which will store the floor plans images. another part will be the database which will be the postGIS SQL database which will store all the other information about the Geoloc system. This database will include the following entities:
+
+1.  polygons
+  Stores information regarding the polygons which are drawn into the system by the users. This table will include the information about the polygon including its coordinates, id, it's parent (If a polygon is drawn inside a floor plan then the floor plan is the group it belongs to i.e. in the group hierarchy the floor plan is this polygon's parent)
+
+    ---------------------------------------
+    |PolyID | Name | Coordinates | Parent |
+    ---------------------------------------
+
+2.  Floor plans
+  Stores information regarding the floor plan including the name, it's spatial overlay information (i.e. its coordinates based on its overlay position on a google map), it's parent (This can be a any object in the system) 
+
+    --------------------------------------------------------------
+    |FPid | Name | File Path | Coordinates(for overlay) | parent |
+    --------------------------------------------------------------
+
+3.  Groups
+  This stores information about a group created by the user. It's id, location information if it has been provided by the user and the group's parent.
+
+    --------------------------
+    |Gid | Location | Parent |
+    --------------------------
+
+4.  Attributes
+This table would be used to store the various attributes for the objects within the database such as polygons, floor plans and groups. The attribute can initially include Access control values and user information
+
+    ------------------------------
+    |ID | Attr_name | Attr_value |
+    ------------------------------
+
+5.  SmartObjects
+  This stores information regarding the smartObjects. This includes the location of the smartObject, the accuracy of the location, timestamp and location source.
+
+    --------------------------------------------------------------------------------------------------------------
+    |SOid | Latitude | Longitude | Altitude | Lat-lng accuracy | Altitude accuracy | Timestamp | Location Source |
+    --------------------------------------------------------------------------------------------------------------
+
+In the case of all these tables for parent information the default value will be ROOT.
+
+* find out if it is better to store the altitude information as a separate column in the object database or it would be better to store the coordinates information such that they make a 3D object instead of a flat polygon.
+
+And finally the web application which will be the interface through which the user will interact with Geoloc within  the SECE system. The web application will be implemented using HTML, JavaScript and CSS (Framework : Twitter Bootstrap). JavaScript will be used in the web application to interact with the Google maps API and to get user input and pass it on to the database and the server. On the server side PHP will be used to help upload the floor plans onto the server and also store the information regarding the various entities such as groups and polygons provided by the user into the database.
