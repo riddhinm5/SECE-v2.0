@@ -265,37 +265,37 @@ The architecture of the web application which reflects this model will consists 
 1.  polygons
   Stores information regarding the polygons which are drawn into the system by the users. This table will include the information about the polygon including its coordinates, id, it's parent (If a polygon is drawn inside a floor plan then the floor plan is the group it belongs to i.e. in the group hierarchy the floor plan is this polygon's parent)
 
-    ---------------------------------------
+    _______________________________________
     |PolyID | Name | Coordinates | Parent |
-    ---------------------------------------
+    _______________________________________
 
 2.  Floor plans
   Stores information regarding the floor plan including the name, it's spatial overlay information (i.e. its coordinates based on its overlay position on a google map), it's parent (This can be a any object in the system) 
 
-    --------------------------------------------------------------
+    ______________________________________________________________
     |FPid | Name | File Path | Coordinates(for overlay) | parent |
-    --------------------------------------------------------------
+    ______________________________________________________________
 
 3.  Groups
   This stores information about a group created by the user. It's id, location information if it has been provided by the user and the group's parent.
 
-    --------------------------
+    __________________________
     |Gid | Location | Parent |
-    --------------------------
+    __________________________
 
 4.  Attributes
 This table would be used to store the various attributes for the objects within the database such as polygons, floor plans and groups. The attribute can initially include Access control values and user information
 
-    ------------------------------
+    ______________________________
     |ID | Attr_name | Attr_value |
-    ------------------------------
+    ______________________________
 
 5.  SmartObjects
   This stores information regarding the smartObjects. This includes the location of the smartObject, the accuracy of the location, timestamp and location source.
 
-    --------------------------------------------------------------------------------------------------------------
+    ______________________________________________________________________________________________________________
     |SOid | Latitude | Longitude | Altitude | Lat-lng accuracy | Altitude accuracy | Timestamp | Location Source |
-    --------------------------------------------------------------------------------------------------------------
+    ______________________________________________________________________________________________________________
 
 In the case of all these tables for parent information the default value will be ROOT.
 
