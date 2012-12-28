@@ -302,3 +302,7 @@ In the case of all these tables for parent information the default value will be
 * find out if it is better to store the altitude information as a separate column in the object database or it would be better to store the coordinates information such that they make a 3D object instead of a flat polygon.
 
 And finally the web application which will be the interface through which the user will interact with Geoloc within  the SECE system. The web application will be implemented using HTML, JavaScript and CSS (Framework : Twitter Bootstrap). JavaScript will be used in the web application to interact with the Google maps API and to get user input and pass it on to the database and the server. On the server side PHP will be used to help upload the floor plans onto the server and also store the information regarding the various entities such as groups and polygons provided by the user into the database.
+
+
+References:
+http://bryce-thomas.blogspot.com/2012/01/noobs-guide-to-creating-google-maps.html
