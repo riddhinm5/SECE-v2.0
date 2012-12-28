@@ -12,3 +12,7 @@
 	height:130px;
 	z-index:1500;
 }
+
+img {
+  max-width: none;
+}

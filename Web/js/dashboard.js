@@ -10,4 +10,5 @@ $(function(){
 	$('#my-root').popover();
 	$('#grp-root').popover();
 	$('#fridge').popover();
+	$('#IRT-lab').popover();
 });
