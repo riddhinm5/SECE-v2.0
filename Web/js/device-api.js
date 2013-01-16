@@ -1,6 +1,6 @@
 (function(exports) {
   var dapi = exports;
-  var host = location.hostname, port = 3000;
+  var host = "irtlaptop8.cs.columbia.edu", port = 3000;
   var apiurl = "http://" + host + ":" + port + "/";
 
   dapi.getURL = function() {
@@ -23,8 +23,9 @@
     $.post(apiurl + "devices/", {device: device}, callback);
   }
 
-  dapi.addArea = function(area, callback) {
-    $.post(apiurl + "areas/", area, callback); 
+  dapi.addArea = function(area, callback, string) {
+    alert(string);
+    $.post("http://localhost/SECe-v2.0/Web/addMapPolygon.php", area, callback); 
   }
 
   dapi.addOverlay = function(mA, mB, rA, rB, file, name, description, altitude, callback) {
@@ -36,7 +37,7 @@
     data.append('overlay[img]', file);
     data.append('overlay[geoRefA]', pA.lng() + " " + pA.lat());
     data.append('overlay[geoRefB]', pB.lng() + " " + pB.lat());
-    data.append('overlay[imgRefAX]', rA.x);
+    data.append('overlay[imgRefAXhttp://localhost/SECe-v2.0/Web/dashboard.php]', rA.x);
     data.append('overlay[imgRefAY]', rA.y);
     data.append('overlay[imgRefBX]', rB.x);
     data.append('overlay[imgRefBY]', rB.y);

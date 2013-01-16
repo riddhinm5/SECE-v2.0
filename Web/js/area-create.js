@@ -115,15 +115,15 @@
     var content = $editor.clone();
     var parentClass = makeid(10);
     content.find("#add-parent").addClass(parentClass);
-    $("." + parentClass).live('change', selectParent);
+   // $("." + parentClass).live('change', selectParent);
+// Changing the display by removing infowindow, adding form on side bar instead
+    //infoWindow = new google.maps.InfoWindow({
+     // content: content.html(),
+     // position: bounds.getCenter()
+    //});
 
-    infoWindow = new google.maps.InfoWindow({
-      content: content.html(),
-      position: bounds.getCenter()
-    });
-
-    google.maps.event.addListener(infoWindow, 'closeclick', cancelOverlay);
-    google.maps.event.addListener(infoWindow, 'domready', function() {
+    //google.maps.event.addListener(infoWindow, 'closeclick', cancelOverlay);
+    /*google.maps.event.addListener(infoWindow, 'domready', function() {
       AreaMap.clearAreas();
       DeviceAPI.getAreas({
         n: bounds.getNorthEast().lat(),
@@ -135,8 +135,8 @@
           fillParentSelect(data, parentClass);
       });
     });
-
-    infoWindow.open(Map.objs.map);
+*/
+    //infoWindow.open(Map.objs.map);
   }
 
   function cancelOverlay() {
@@ -155,16 +155,16 @@
   function saveOverlay(e) {
     var b = $(e.target);
     var form = b.parent();
-    infoWindowContent = form.parent();
+    //infoWindowContent = form.parent();
     var $error = form.find(".error");
 
     $error.hide();
     b.show();
-
+    
     var name = form.find("#add-name").val()
     var altitude = form.find("#add-altitude").val()
-    var parent_area = form.find("#add-parent").val()
-
+    var parent_area = $("#add-parent").val()
+    alert(parent_area);
     if (name == "") {
       $error.text("Please enter a valid name.").show();
       return;
@@ -179,8 +179,9 @@
         parent: parent_area,
         circle: (overlayType == "circle")
     }
-
+    alert(area.parent);
     if(area.circle) {
+        alert(overlay.getCenter());
         var c = overlay.getCenter();
         area.center = c.lng() + " " + c.lat();
         area.radius = overlay.radius;
@@ -195,6 +196,7 @@
           sw.lng() + " " + ne.lat(),
           ne.lng() + " " + ne.lat()
         ];
+        alert(points[0]);
         area.shape = points;
     } else {
         var points = [];
@@ -202,19 +204,19 @@
           points.push(p.lng() + " " + p.lat());
         });
         area.shape = points;
+        alert(points[0]);
     }
-
-    DeviceAPI.addArea(area, areaDone);
+    alert(area.name);
+    DeviceAPI.addArea(area, areaDone, "from saveOverlay");
     b.hide();
   }
 
   function areaDone(data) {
-    if(data.success) {
-      infoWindowContent.children().hide();
-      infoWindowContent.find(".success").show();
+    if(data.success = 'success') {
+      alert("area added successfully!");
+      window.location= "http://localhost/SECe-v2.0/Web/dashboard.php";
     } else {
-      infoWindowContent.find(".editor-form .error").text("There was an error saving.").show();
-      infoWindowContent.find(".editor-form .btn-primary").show();
+      alert("Error adding area please try again");
     }
   }
 })(AreaCreate = {});

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Overlay Tiler Generated Map</title>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <style>
+      html, body, #map {
+        height: 100%;
+        margin: 0;
+      }
+    </style>
+    <script>
+      google.maps.event.addDomListener(window, 'load', function() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          minZoom:  0 ,
+          maxZoom:  21 ,
+        });
+
+        var overlay = new google.maps.ImageMapType({
+          getTileUrl: function(coord, zoom) {
+            if (!inBounds(coord, zoom)) {
+              return null;
+            }
+            return [zoom, coord.x, coord.y + '.png'].join('/')
+          },
+          tileSize: new google.maps.Size(256, 256)
+        });
+
+        var overlayBounds = new google.maps.LatLngBounds;
+        function inBounds(coord, zoom) {
+          var proj = map.getProjection();
+          
+          var tileWidth = 256 / Math.pow(2, zoom);
+          var tl = new google.maps.Point(coord.x * tileWidth, coord.y * tileWidth);
+          var br = new google.maps.Point(tl.x + tileWidth, tl.y + tileWidth);
+
+          var tileBounds = new google.maps.LatLngBounds;
+          tileBounds.extend(proj.fromPointToLatLng(tl));
+          tileBounds.extend(proj.fromPointToLatLng(br));
+
+          return overlayBounds.intersects(tileBounds);
+        }
+        google.maps.event.addListenerOnce(map, 'projection_changed', function() {
+          var proj = map.getProjection();
+          var extend = function(x, y) {
+            overlayBounds.extend(proj.fromPointToLatLng(new google.maps.Point(x, y)));
+          };
+          extend(39.750000, 86.271778);
+          extend(79.250000, 88.021778);
+          extend(76.000000, 119.805598);
+          extend(36.500000, 118.055598);
+
+          map.fitBounds(overlayBounds);
+          map.overlayMapTypes.push(overlay);
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+  </body>
+</html>
