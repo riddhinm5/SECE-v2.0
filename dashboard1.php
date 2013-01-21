@@ -4,29 +4,30 @@
   <link rel="stylesheet" type="text/css" href="css/styles.css" >
 	<script type="text/javascript" src="js/jquery-1.7.1.js"></script>
     <script type="text/javascript"
-      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDB8hSxJc0O5AOlzvYVAle7ARvFENvFqbI&sensor=true">
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAECqGYTwjGNSQcRBRGGm3jy5B4cDhVLqE&sensor=true">
     </script>
-    <script type="text/javascript" src="js/sidebar.js"></script>
-    <script type="text/javascript" src="js/groups.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/dashboard.js"></script>
     <script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
 </head>
 <body>
+  <?php
+  $_SESSION['data'] = $_POST['data'];
+  ?>
 	<div class="navbar">
 		<div class="navbar-inner">
-			<div class="container-fluid">
+			<div class="container">
 				<ul class="nav">
 					<li><a class="brand" href="#">SECE</a></li>
 					<li><a href="#">Devices</a></li>
 					<li><a href="#">Rules</a></li>
-					<li class="active"><a href="dashboard.php">Geoloc</a></li>
+					<li class="active"><a href="#">Geoloc</a></li>
 				</ul>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid">
 		<div class="row-fluid">
-			<div class="span3">
+			<div id="sidebar" class="span3">
         <div class="accordion" id="accordion2">
           <div class="accordion-group">
                   <div class="accordion-heading">
@@ -60,7 +61,7 @@
                           $fp_result = mysql_query($fp_query, $con);
                           
                           $i = 0;
-                          $parents; $entries = array();
+                          $parents;
                           $all_rows;
                           $j = 0; $k = 0; $l = 0;
 
@@ -73,7 +74,6 @@
                             $all_rows[$row['gid']]['file_path'] = '';
                             $all_rows[$row['gid']]['type'] = "group";
                             $parents[$row['gid']] = $row['parent'];
-                            array_push($entries, array('uid' => $row['gid'], 'pid' => $row['parent']));
                             $i++;
                           }
                           $crap;
@@ -93,7 +93,6 @@
                             $all_rows[$row['polyID']]['type'] = "polygon";
                             $all_rows[$row['polyID']]['name']."<br>";
                             $parents[$row['polyID']] = $row['parent'];
-                            array_push($entries, array('uid' => $row['polyID'], 'pid' => $row['parent']));
                             $i++;
                           }
                           while($row = mysql_fetch_array($fp_result)){
@@ -104,57 +103,13 @@
                             $all_rows[$row['fpid']]['file_path'] = $row['tiler_key'];
                             $all_rows[$row['fpid']]['type'] = "fp";
                             $all_rows[$row['fpid']]['name']."<br>";
-                            $parents[$row['fpid']] = $row['parent'];
-                            array_push($entries, array('uid' => $row['fpid'], 'pid' => $row['parent']));
+                            $parents[$row['fpid']] = $row['parent']; 
                             $i++;
                           }
                           echo "<input type='hidden' id='numobjs' value=".$i."><br>";
-
-                          // Trying tree print
-                          $tree = array();
-                          foreach($entries as $row)
-                            adj_tree($tree, $row);
-
-                          function adj_tree(&$tree, $item) {
-                            $i = $item['uid'];
-                            $p = $item['pid'];
-                            $tree[$i] = isset($tree[$i]) ? $item + $tree[$i] : $item;
-                            $tree[$p]['_children'][] = &$tree[$i];
-                          }
-
-                          function print_tree($node, $indent) {
-                            global $j, $k, $l, $all_rows;
-                            $key = $node['uid'];
-                            if(strcmp($key, "") != 0) {
-                              if (strcmp($all_rows[intval($key)]['type'], "group") == 0) {
-                                echo "<div class='hover' id='groupobj".$j."'>".str_repeat('&nbsp&nbsp&nbsp', $indent) ."<a href='addGroup.php?parent=".$key."&source=edit'>". $all_rows[$key]['name']."</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div>"; 
-                                echo "<input type='hidden' id='groupid".$j."' value=".$key.">";
-                                echo "<input type='hidden' id='groupcoord".$j++."' value=".$all_rows[$key]['coords'].">";
-                              }
-                              else if (strcmp($all_rows[$key]['type'], "fp") == 0) {
-                                echo "<div class='hover' id='fpobj".$k."'>".str_repeat('&nbsp&nbsp&nbsp', $indent) ."<a href='addFloorPlan.php?parent=".$key."&source=edit'>". $all_rows[$key]['name'] . "</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div>";
-                                echo "<input type='hidden' id='fpid".$k."' value=".$key.">";
-                                echo "<input type='hidden' id='fpname".$k."' value=".str_replace(" ","+",$all_rows[$key]['name']).">";
-                                echo "<input type='hidden' id='fppath".$k."' value=".$all_rows[$key]['file_path'].">";
-                                echo "<input type='hidden' id='fpcoords".$k++."' value=".$all_rows[$key]['coords'].">";
-                              }
-                              else {
-                                echo "<div class='hover' id='polyobj".$l."'>". str_repeat('&nbsp&nbsp&nbsp', $indent) ."<a href='mapPolygon.php?parent=".$key."&source=edit' >". $all_rows[$key]['name'] . "</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div>";
-                                echo "<input type='hidden' id='polyid".$l."' value=".$key.">";
-                                echo "<input type='hidden' id='polyname".$l."' value=".str_replace(" ","+",$all_rows[$key]['name']).">";
-                                echo "<input type='hidden' id='polyradius".$l."' value=".$all_rows[$key]['radius'].">";
-                                echo "<input type='hidden' id='polycoords".$l++."' value=".$all_rows[$key]['coords'].">";
-                              }
-                            }
-                            if(isset($node['_children']))
-                                foreach($node['_children'] as $child)
-                                    print_tree($child, $indent + 1);
-                          }
-                          
-                          print_tree($tree[0], 0);
                           
                           // Display all objects in the database within the tree structure
-                         /* $prev_obj = 1;
+                          $prev_obj = 1;
                           asort($parents);
 
                           echo "<ul class=\"my-floor-plans\">";
@@ -165,9 +120,11 @@
                                 echo "<ul>";
                               else if ($all_rows[$key]['parent'] != $all_rows[$prev_obj]['parent'])
                                 echo "</ul>";
-                              echo "<div class='hover' id='groupobj".$j."'><li class = 'pop-up'><a href='addGroup.php?parent=".$key."&source=edit'>".$all_rows[$key]['name']."</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</li></div>";
-                              echo "<input type='hidden' id='groupid".$j."' value=".$key.">";
-                              echo "<input type='hidden' id='groupcoord".$j++."' value=".$all_rows[$key]['coords'].">";
+                              echo "<li class = 'pop-up'><a href='#' id='groupobj".$j."' class='btn btn-link' rel='popover' data-html='true' data-placement='bottom' data-content=\"<a href='addFloorPlans.php?parent=".$key."'><i class='icon-plus'></i>&nbspFloor Plan</a><br><a href='mapPolygon.php?parent=".$key."'><i class='icon-plus'></i>&nbspPolygon</a><br><a href='addGroup.php?parent=".$key."'><i class='icon-plus'></i>&nbspgroup</a><br><a href='deleteGroup.php?gid=".$key."'><i class='icon-minus'></i>&nbspDelete</a>\" data-original-title='Options' data-trigger='click'>" . $all_rows[$key]['name'] . "</a></li>";
+                              echo "<input type='hidden' id='groupobj".$j."' value=".$all_rows[$key]['coords'].">";
+                              echo "<script type='text/javascript'>";
+                              echo "$('#groupobj".$j++."').popover();";
+                              echo "</script>";
                             }
                             // Handle floor plans
                             else if(strcmp($all_rows[$key]['type'], "fp") == 0) {
@@ -175,11 +132,14 @@
                                 echo "<ul>";
                               else if ($all_rows[$key]['parent'] != $all_rows[$prev_obj]['parent'])
                                 echo "</ul>";
-                                echo "<div class='hover' id='fpobj".$k."'><li class = 'pop-up'><a href='addFloorPlan.php?parent=".$key."&source=edit'>". $all_rows[$key]['name'] . "</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</li></div>";
+                               echo "<li class = 'pop-up'><a href='#' id='fpobj".$k."' class='btn btn-link' rel='popover' data-html='true' data-placement='bottom' data-original-title='Options' data-trigger='click' data-content=\"<a href='addFloorPlans.php?parent=".$key."'><i class='icon-plus'></i>&nbspFloor Plan</a><br><a href='fpPolygon.php?parent=".$key."'><i class='icon-plus'></i>&nbspPolygon</a><br><a href='addGroup.php?parent=".$key."'><i class='icon-plus'></i>&nbspgroup</a><br><a href='deleteFp.php?fpid=".$key."'><i class='icon-minus'></i>&nbspDelete</a>\">". $all_rows[$key]['name'] . "</a></li>";
                                 echo "<input type='hidden' id='fpid".$k."' value=".$key.">";
-                                echo "<input type='hidden' id='fpname".$k."' value=".str_replace(" ","+",$all_rows[$key]['name']).">";
+                                echo "<input type='hidden' id='fpname".$k."' value=".str_replace(" ","+", $all_rows[$key]['name']).">";
                                 echo "<input type='hidden' id='fppath".$k."' value=".$all_rows[$key]['file_path'].">";
-                                echo "<input type='hidden' id='fpcoords".$k++."' value=".$all_rows[$key]['coords'].">";
+                                echo "<input type='hidden' id='fpcoords".$k."' value=".$all_rows[$key]['coords'].">";
+                                echo "<script type='text/javascript'>";
+                                echo "$('#fpobj".$k++."').popover();";
+                                echo "</script>";
                              }
                             // Handle polygons
                             else {
@@ -187,16 +147,19 @@
                                 echo "<ul>";
                               else if ($all_rows[$key]['parent'] != $all_rows[$prev_obj]['parent'])
                                 echo "</ul>";
-                                echo "<div class='hover' id='polyobj".$l."'><li class = 'pop-up'><a href='mapPolygon.php?parent=".$key."&source=edit' >". $all_rows[$key]['name'] . "</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</li></div>";
+                                echo "<li class = 'pop-up'><a href='#' id='polyobj".$l."' class='btn btn-link' rel='popover' data-html='true' data-placement='bottom' data-original-title='Options' data-trigger='click' data-content=\"<a href='addFloorPlans.php?parent=".$key."'><i class='icon-plus'></i>&nbspFloor Plan</a><br><a href='mapPolygon.php?parent=".$key."'><i class='icon-plus'></i>&nbspPolygon</a><br><a href='addGroup.php?parent=".$key."'><i class='icon-plus'></i>&nbspgroup</a><br><a href='deletePolygon.php?polyID=".$key."'><i class='icon-minus'></i>&nbspDelete</a>\">". $all_rows[$key]['name'] . "</a></li>";
                                 echo "<input type='hidden' id='polyid".$l."' value=".$key.">";
                                 echo "<input type='hidden' id='polyname".$l."' value=".str_replace(" ","+",$all_rows[$key]['name']).">";
                                 echo "<input type='hidden' id='polyradius".$l."' value=".$all_rows[$key]['radius'].">";
-                                echo "<input type='hidden' id='polycoords".$l++."' value=".$all_rows[$key]['coords'].">";
+                                echo "<input type='hidden' id='polycoords".$l."' value=".$all_rows[$key]['coords'].">";
+                                echo "<script type='text/javascript'>";
+                                echo "$('#polyobj".$l++."').popover();";
+                                echo "</script>";
                              }
                               $prev_obj = $key;
                            }
 
-                           echo "</ul>";*/
+                           echo "</ul>";
                           echo $_SESSION['data']."<br>";
                         ?>
                       </ul>
@@ -228,7 +191,7 @@
                 <div class="accordion-group">
                   <div class="accordion-heading">
                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                      Smart Objects
+                      SmartObjects
                     </a>
                   </div>
                   <div id="collapseThree" class="accordion-body collapse" style="height: 0px;">
@@ -267,7 +230,7 @@
                           echo "<ul>";
                           foreach ($smart_objs as $key => $value) {
                             if ($all_rows[$value]['loc_acc'] <= 10 && $all_rows[$value]['status'] != 0) {
-                              echo "<li class='hover' id='so".$i."'><a href'#'>".$all_rows[$value]['name']."</a></li>";
+                              echo "<li><a href=\"#\" id=\"smartobj".$value."\" class=\"btn btn-link\" rel=\"popover\" data-html=\"true\" data-placement=\"bottom\" data-content=\"<a href='editSmartObjs.php'><i class='icon-pencil'></i>&nbspEdit</a><br><a href='#'><i class='icon-minus'></i>&nbspHide</a>\" data-original-title=\"Options\" data-trigger=\"click\">".$all_rows[$value]['name']."</a></li>";
                               echo "<input type = 'hidden' id = \"soid".$i."\" value = ".$value.">";
                               echo "<input type = 'hidden' id = \"soname".$i."\" value = ".$all_rows[$value]['name'].">";
                               echo "<input type = 'hidden' id = \"solat".$i."\" value = ".$all_rows[$value]['latitude'].">";
@@ -285,7 +248,7 @@
                           echo "<ul>";
                           foreach ($smart_objs as $key => $value) {
                             if ($all_rows[$value]['loc_acc'] > 10 && $all_rows[$value]['status'] != 0){
-                              echo "<li class='hover' id='so".$i."'><a href='#'>".$all_rows[$value]['name']."</a></li>";
+                              echo "<li><a href=\"#\" id=\"smartobj".$value."\" class=\"btn btn-link\" rel=\"popover\" data-html=\"true\" data-placement=\"bottom\" data-content=\"<a href='editSmartObjs.php?soid=".$value."&lat=".$all_rows[$value]['latitude'].".&lng=".$all_rows[$value]['longitude']."&alt=".$all_rows[$value]['altitude']."'><i class='icon-pencil'></i>&nbspEdit</a><br><a href='hideSmartObj.php?soid=".$value."'><i class='icon-minus'></i>&nbspHide</a>\" data-original-title=\"Options\" data-trigger=\"click\">".$all_rows[$value]['name']."</a></li>";
                               echo "<input type = 'hidden' id = \"soid".$i."\" value = ".$value.">";
                               echo "<input type = 'hidden' id = \"soname".$i."\" value = ".$all_rows[$value]['name'].">";
                               echo "<input type = 'hidden' id = \"solat".$i."\" value = ".$all_rows[$value]['latitude'].">";
@@ -306,31 +269,8 @@
                 </div>
         </div>
 			</div>
-			<div class="span9">
-        <form class="form-horizontal" method="post" action="addingGroup.php" onsubmit="return validate()">
-          <div class="control-group">
-            <?php
-              echo "<input type='hidden' id='grpparent' name='grpparent' value=".$_GET['parent'].">"
-            ?>
-            <label class="control-label" for="inputName">Name</label>
-            <div class="controls">
-              <input type="text" id="inputName" placeholder="Group Name" name="grpname">
-            </div>
-          </div>
-          <div class="control-group">
-            <label class="control-label" for="inputAltitude">Altitude</label>
-            <div class="controls">
-              <input type="text" id="inputAltitude" placeholder="Altitude" name="grpaltitude">
-            </div>
-          </div>
-          <div class="control-group">
-            <div class="controls">
-              <button type="submit" class="btn">Submit</button>
-              <a href="dashboard.php" class="btn btn-danger">Cancel</a>
-            </div>
-          </div>
-        </form>
-		  </div>
+			<div class="span9" id="map">
+			</div>
 		</div>
 	</div>
 </body>

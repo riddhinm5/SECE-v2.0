@@ -140,6 +140,7 @@
   }
 
   function cancelOverlay() {
+    alert("close");
     infoWindow.close();
 
     overlay.setMap(null);
@@ -153,6 +154,7 @@
   }
 
   function saveOverlay(e) {
+    alert("save");
     var b = $(e.target);
     var form = b.parent();
     //infoWindowContent = form.parent();
@@ -164,7 +166,6 @@
     var name = form.find("#add-name").val()
     var altitude = form.find("#add-altitude").val()
     var parent_area = $("#add-parent").val()
-    alert(parent_area);
     if (name == "") {
       $error.text("Please enter a valid name.").show();
       return;
@@ -179,9 +180,7 @@
         parent: parent_area,
         circle: (overlayType == "circle")
     }
-    alert(area.parent);
     if(area.circle) {
-        alert(overlay.getCenter());
         var c = overlay.getCenter();
         area.center = c.lng() + " " + c.lat();
         area.radius = overlay.radius;
@@ -196,7 +195,6 @@
           sw.lng() + " " + ne.lat(),
           ne.lng() + " " + ne.lat()
         ];
-        alert(points[0]);
         area.shape = points;
     } else {
         var points = [];
@@ -204,9 +202,7 @@
           points.push(p.lng() + " " + p.lat());
         });
         area.shape = points;
-        alert(points[0]);
     }
-    alert(area.name);
     DeviceAPI.addArea(area, areaDone, "from saveOverlay");
     b.hide();
   }
@@ -214,7 +210,7 @@
   function areaDone(data) {
     if(data.success = 'success') {
       alert("area added successfully!");
-      window.location= "http://localhost/SECe-v2.0/Web/dashboard.php";
+      window.location= "http://localhost/SECE-v2.0/Web/dashboard.php";
     } else {
       alert("Error adding area please try again");
     }

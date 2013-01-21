@@ -24,12 +24,12 @@
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span3">
-        <form class="form-search">
+        <div class="form-search">
           <div class="input-append">
             <input type="text" class="search-query" id="location" placeholder="Search Location">
-            <button type="submit" class="btn btn-primary" onclick="getAddress()"><i class="icon-search"></i></button>
+            <button type="submit" class="btn" onclick="getAddress()"><i class="icon-search"></i></button>
           </div>
-        </form>
+        </div>
         <br>
         <br>
         <div id="area-editor">

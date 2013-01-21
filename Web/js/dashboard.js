@@ -3,6 +3,7 @@ var map;
 var panorama;
 var sObj = [];
 var polygons = [];
+var floor_plans = [];
 
 // Constructor for the smartObject
 function smartObj(id, name, lat, lng, loc_acc, alt, marker,infowindow){
@@ -23,6 +24,22 @@ function polygonsOverlay(id, name, coords, radius) {
 	this.coords = coords;
 	this.radius = radius;
 	this.dispPolygons = dispPolygons;
+}
+
+// Constructor for floor plans
+function floorPlanOverlay(id, name, coords, path) {
+	this.id = id;
+	this.name = name;
+	this.coords = coords;
+	this.path = path;
+	this.dispFloorPlans = dispFloorPlans;
+}
+
+function dispFloorPlans() {
+	alert(this.id);
+	alert(this.name);
+	alert(this.coords);
+	alert(this.path);
 }
 
 function dispPolygons() {
@@ -63,9 +80,20 @@ $(function(){
 		var polyCoords = document.getElementById("polycoords"+i).value;
 		var polyRadius = document.getElementById("polyradius"+i).value;
 		polygons[i] = new polygonsOverlay(polyId, polyName, polyCoords, polyRadius);
+		//polygons[i].dispPolygons();
 		i++;
 	}
 
+	i = 0;
+
+	while(document.getElementById("fpid"+i) != null) {
+		var id = document.getElementById("fpid"+i).value;
+		var name = document.getElementById("fpname"+i).value;
+		var coords = document.getElementById("fpcoords"+i).value;
+		var path = document.getElementById("fppath"+i).value;
+		floor_plans[i] = new floorPlanOverlay(id, name, coords, path);
+		i++;
+	}
 	initialize();
 });
 
@@ -87,6 +115,7 @@ function initialize() {
 	}
 	addSmartObjects();
 	addPolygons();
+	addFloorPlans();
 }
 
 function addSmartObjects(){
@@ -188,4 +217,68 @@ function addPolygons(){
 			accCircle = new google.maps.Circle(accOptions);
 		}
 	}
+}
+
+function addFloorPlans() {
+	var path = [];
+	var xpt = [[]];
+	var ypt = [[]];
+
+	for( var k = 0 ; k < floor_plans.length; k++) {	
+		path[k] = document.getElementById("fppath"+k).value;
+		var coords = floor_plans[k].coords.replace("POLYGON((","");
+		coords = coords.replace("))","");
+		var boundpoints = coords.split(",");
+
+		for (var j = 0 ; j < boundpoints.length; j++) {
+			xpt[k, j] = boundpoints[j].split("+")[0];
+			ypt[k, j] = boundpoints[j].split("+")[1];
+		}
+	}
+	var j = 0;
+	var overlay = [];
+	for (var k = 0; k < floor_plans.length; k++) {
+		j = 0;
+		overlay[k] = new google.maps.ImageMapType({
+          getTileUrl: function(coord, zoom) {
+	            if (!inBounds(coord, zoom, j)) {
+	              return null;
+	            }
+	            return "overlays/"+path[j]+"/"+[zoom, coord.x, coord.y + '.png'].join('/')
+          },
+          tileSize: new google.maps.Size(256, 256)
+    	});
+	}
+
+    var overlayBounds = [];
+    function inBounds(coord, zoom, j) {
+      var proj = map.getProjection();
+      
+      var tileWidth = 256 / Math.pow(2, zoom);
+      var tl = new google.maps.Point(coord.x * tileWidth, coord.y * tileWidth);
+      var br = new google.maps.Point(tl.x + tileWidth, tl.y + tileWidth);
+
+      var tileBounds = new google.maps.LatLngBounds;
+      tileBounds.extend(proj.fromPointToLatLng(tl));
+      tileBounds.extend(proj.fromPointToLatLng(br));
+      return overlayBounds[j].intersects(tileBounds);
+    }
+
+    google.maps.event.addListenerOnce(map, 'projection_changed', function() {
+    	for(var j = 0 ; j < floor_plans.length; j++) {
+    		overlayBounds[j] = new google.maps.LatLngBounds;
+    		var proj = map.getProjection();
+    		
+    		var extend = function(x, y) {
+    			overlayBounds[j].extend(proj.fromPointToLatLng(new google.maps.Point(x, y)));
+      	};
+	    	extend(xpt[j, 0], ypt[j, 0]);
+	      	extend(xpt[j, 1], ypt[j, 1]);
+	      	extend(xpt[j, 2], ypt[j, 2]);
+	      	extend(xpt[j, 3], ypt[j, 3]);
+
+  			map.overlayMapTypes.push(overlay[j]);
+      		//map.fitBounds(overlayBounds[j]);
+      	}
+	});
 }

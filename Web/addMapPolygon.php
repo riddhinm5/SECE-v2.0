@@ -56,6 +56,7 @@ if( $_REQUEST['name'] )
 	echo $obj_ids."<br>";
 	$ins_ids = mysql_query($obj_ids, $con);
 	// Insert query for polygons polyID, name, coords, parent, userId, circle, center, radius, altitude
+	echo $coord_string."<br>";
 	$insert_query = "insert into polygons values(".$newid.",'".$name."',PolygonFromText('POLYGON((".$coord_string."))'),'".$parent."',".$userId.",".$circle.",GeomFromText('POINT(".$center.")'),'".$radius."','".$altitude."');";
 	echo $insert_query;
 	$result = mysql_query($insert_query, $con);

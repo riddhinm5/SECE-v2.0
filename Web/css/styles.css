@@ -19,3 +19,16 @@
 img {
   max-width: none;
 }
+
+iframe {
+	width: 100%;
+	height: 100%;
+}
+
+.icon-chevron-down{
+position:absolute;
+}
+
+#map{
+	height:500px;
+}

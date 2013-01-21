@@ -20,9 +20,9 @@ $(function(){
 		var x = event.pageX;
 		var y = event.pageY;
 		
-		//var overlay = "<img src='../img/circle_green.png' style='position:absolute; top:"+y+"px; left:"+x+"px; z-index:1000; width:7.5px; height:7.5px'>";
+		var overlay = "<img src='../img/circle_green.png' style='position:absolute; top:"+y+"px; left:"+x+"px; z-index:1000; width:7.5px; height:7.5px'>";
 		$("#shape").HTML += "<input type='hidden' id='x"+num_click+"' value='"+x+"'><input type='hidden' id='y"+(num_click++)+"' value='"+y+"'>";
-		//document.getElementById("fp").innerHTML += overlay;
+		document.getElementById("fp").innerHTML += overlay;
 	});
 
     $(".btn-primary").click(function(event){
@@ -45,6 +45,9 @@ $(function(){
 	        circle: false
 	    }
     	var points= [];
+    	var tiler-key;
+    	var floor-plan;
+
     	for(var i = 0; i < num_click; i++)
     		points[i] = $("#x"+i).val() + " " + $("#y"+i).val();
     	area.shape = points;

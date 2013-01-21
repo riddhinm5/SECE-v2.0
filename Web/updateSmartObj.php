@@ -17,5 +17,5 @@ echo $smartobjs_query."<br>";
 $smartobjs_result = mysql_query($smartobjs_query1, $con);
 $smartobjs_result = mysql_query($smartobjs_query2, $con);
 $smartobjs_result = mysql_query($smartobjs_query3, $con);
-header("location: dashboard.php");
+//header("location: http://irtlaptop8.cs.columbia.edu/SECE-v2.0/Web/dashboard.php");
 ?>

@@ -8,7 +8,7 @@ $(function(){
 	geocoder = new google.maps.Geocoder();
 	var latlng = new google.maps.LatLng(40.809038567298586, -73.96126449108124);
 	var myOptions = {
-			zoom: 10,
+			zoom: 14,
 			center: latlng,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 	}
@@ -21,18 +21,20 @@ $(function(){
     initApp(id, latlng);
 });
 
-function initApp(id, latLng){
+function initApp(id, latlng){
+
 	//Check if street view is available for the location where the user is palcing the smart object	
 	var marker = new google.maps.Marker({
 		map: map, 
-		position: latLng,
+		position: latlng,
 		title: "mapMarker",
 		draggable: true,
 		animation: google.maps.Animation.DROP
 	});
+	map.setCenter(latlng);
 	
-	updateMarkerPosition(id, latLng);
-	geocodePosition(latLng);	
+	updateMarkerPosition(id, latlng);
+	geocodePosition(latlng);	
 	//for normal marker movement		
 	google.maps.event.addListener(marker, 'dragstart', function() {
 		//do nothing
@@ -65,13 +67,13 @@ function geocodePosition(pos) {
 	});
 }
 
-function updateMarkerPosition(id, latLng) {
+function updateMarkerPosition(id, latlng) {
 	document.getElementById('placeObj').innerHTML = "<h4>Place Smart Object: </h4>"+
 	"<form id = \"markerLocation\" action = \"updateSmartObj.php\" method = \"post\" class=''>"+
 	"<input type='hidden' id='soid' name='soid' value="+ id +">" +
-	"<input type = \"hidden\" id = \"newlat\" name = \"newlat\" value = " +latLng.lat()+">"+ 
-	"<input type = \"hidden\" id = \"lng\" name = \"newlng\" value = "+latLng.lng()+">"+
-	"<input type = \"submit\" class='btn btn-primary' value = \"Locate!\"></form>";
+	"<input type = \"hidden\" id = \"newlat\" name = \"newlat\" value = " +latlng.lat()+">"+ 
+	"<input type = \"hidden\" id = \"lng\" name = \"newlng\" value = "+latlng.lng()+">"+
+	"<input type = \"submit\" class='btn btn-primary' value = \"Locate!\">&nbsp&nbsp&nbsp&nbsp<a href='dashboard.php' class='btn btn-danger'>Cancel</a></form>";
 }
 
 

@@ -25,7 +25,7 @@
 
   dapi.addArea = function(area, callback, string) {
     alert(string);
-    $.post("http://localhost/SECe-v2.0/Web/addMapPolygon.php", area, callback); 
+    $.post("http://localhost/SECE-v2.0/Web/addMapPolygon.php", area, callback); 
   }
 
   dapi.addOverlay = function(mA, mB, rA, rB, file, name, description, altitude, callback) {
